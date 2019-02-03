@@ -11,17 +11,42 @@ export default style = StyleSheet.create({
     flex: 1, 
     alignItems: 'center', 
     justifyContent: 'center',
-    paddingBottom: 200,
+    paddingBottom: 100,
   },
   textWelcome:{
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'center',
-    paddingBottom: 32,
+    paddingBottom: 10,
+  },
+  textSizeWelcome:{
+    fontSize: 24,
   },
   button: {
     backgroundColor: 'white',
     paddingBottom: 16,
     paddingTop: 16
+  },
+  buttonText: {
+    textAlign: 'center', 
+    fontSize: 18,
+  },
+  pin:{
+    marginBottom: 16,
+    marginTop: 16,
+  },
+  arrow: {
+    marginTop: 16
+  },
+  buttonEmpty: {
+    backgroundColor: 'white',
+    paddingBottom: 16,
+    paddingTop: 16,
+    alignItems: 'center',
+  },
+  buttonTextEmpty: {
+    textAlign: 'center', 
+    fontSize: 18,
+    width: 200
   }
 })

@@ -1,13 +1,13 @@
 import React from 'react';
-import { StyleSheet, View, Text, ImageBackground, Image } from 'react-native';
+import {Text}from 'react-native';
+import { createAppContainer, createStackNavigator } from 'react-navigation'
 import HomeScreen from './src/screens/HomeScreen';
+import TripsScreen from './src/screens/TripsScreen';
 
-export default class App extends React.Component {
-  render() {
-    return ( 
-      <View style={{flex: 1}}> 
-        <HomeScreen />
-     </View>
-    );
-  }
-}
+
+const AppNavigator = createStackNavigator({
+  Home: HomeScreen,
+  Trips: TripsScreen,
+},{ initialRouteName: 'Trips' })
+
+export default createAppContainer(AppNavigator);

@@ -5,6 +5,10 @@ import style from './styles';
 
 class HomeScreen extends Component{
 
+  static navigationOptions = {
+    header: null,
+  }
+
   state={
     show: true
   }
@@ -25,23 +29,25 @@ class HomeScreen extends Component{
           <Image 
             source={assets.logo} />
         </View>
-
-        <View style={style.textWelcome}>
-          <Text style={{fontSize: 24}}>Seja bem vindo!</Text>
-        </View>       
+  
         { !this.state.show ?
-          <TouchableWithoutFeedback onPress={this.handleButton}>
-            <View style={style.button}>
-              <Text style={{textAlign: 'center', fontSize: 18}}>COMEÇAR</Text>
-            </View>
-          </TouchableWithoutFeedback>
+          <View>
+            <View style={style.textWelcome}>
+              <Text style={style.textSizeWelcome}>Seja bem vindo!</Text>
+            </View>     
+            <TouchableWithoutFeedback onPress={this.handleButton}>
+              <View style={style.button}>
+                <Text style={style.buttonText}>COMEÇAR</Text>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
           : 
-          <TouchableWithoutFeedback onPress={this.handleButton}>
-            <View style={style.button}>
-              <Image source={assets.pin} />
-              <Text style={{textAlign: 'center', fontSize: 18}}>Vamos planejar sua
+          <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Trips')}>
+            <View style={style.buttonEmpty}>
+              <Image source={assets.pin} style={style.pin} />
+              <Text style={style.buttonTextEmpty}>Vamos planejar sua
               primeira viagem? </Text>
-              <Image source={assets.arrow} />
+              <Image source={assets.arrow} style={style.arrow} />
             </View>
           </TouchableWithoutFeedback>
         }

@@ -27,13 +27,12 @@ export default class TripScreen extends Component {
             horizontal 
             pagingEnabled 
             keyExtractor={ item => item.id }/>
-          
         </View>
       </View>
     )
   }
 
   renderItem = ({item}) =>{
-    return <Trip title={item.name} price={item.price}/>
+    return <Trip onPress={() => this.props.navigation.navigate('Trip')} title={item.name} price={item.price}/>
   }
 }

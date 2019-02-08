@@ -53,8 +53,7 @@ const styles = StyleSheet.create({
   input:{
     backgroundColor: '#EFE9E9',
     padding: 20,
-    marginTop: 120,
-
+    marginTop: 16
   },
   btn:{
     backgroundColor: '#EFE9E9',

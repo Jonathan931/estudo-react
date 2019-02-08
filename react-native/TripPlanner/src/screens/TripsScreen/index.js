@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, FlatList, TouchableOpacity, Image, AsyncStorage } from 'react-native';
 import isIphoneX from '../../utils/isIphoneX';
 import MapView from 'react-native-maps';
 import Trip from './Trip';
@@ -9,12 +9,12 @@ export default class TripScreen extends Component {
     header: null,
   }
 
+  state ={
+    trips: [],
+  }
+
   render() {
-    console.log(isIphoneX())
-    const trips= [
-      { id: '1', name: 'EuroTrip2019', price: 'R$ 5000'},
-      { id: '2', name: 'Expedição Atacama', price: 'R$ 3000'},
-    ];
+    const { trips } = this.state;
     return (
       <View style={{
         flex: 1,
@@ -30,7 +30,7 @@ export default class TripScreen extends Component {
               longitudeDelta: 0.0421,
             }}/>
             <TouchableOpacity 
-              onPress={ () => this.props.navigation.navigate('AddTrip') }
+              onPress={ () => this.props.navigation.navigate('AddTrip', { refresh: this.loadData }) }
               style={{ 
                 position: 'absolute', 
                 bottom: 0,
@@ -55,7 +55,18 @@ export default class TripScreen extends Component {
     )
   }
 
+  componentDidMount(){
+    this.loadData();
+  }
+  loadData = async() =>{
+    const tripsAS = await AsyncStorage.getItem('trips');
+    let trips = [];
+    if (tripsAS){
+      trips = JSON.parse(tripsAS);
+    }
+    this.setState({ trips })
+  }
   renderItem = ({item}) =>{
-    return <Trip onPress={() => this.props.navigation.navigate('Trip')} title={item.name} price={item.price}/>
+    return <Trip onPress={() => this.props.navigation.navigate('Trip')} title={item.trip} price={item.price}/>
   }
 }

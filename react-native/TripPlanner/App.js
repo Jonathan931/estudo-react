@@ -11,6 +11,6 @@ const AppNavigator = createStackNavigator({
   Trip: TripScreen,
   AddTrip: AddTripScreen,
   AddPoint: AddPointScreen,
-},{ initialRouteName: 'Trips' })
+},{ initialRouteName: 'Home' })
 
 export default createAppContainer(AppNavigator);

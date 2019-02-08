@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Image, AsyncStorage } from 'react-native';
 import styles from './styles';
 
 export default class TripScreen extends Component {
@@ -8,6 +8,11 @@ export default class TripScreen extends Component {
     header: null,
   }
   
+  state={
+    trips: [],
+    points: [],
+  }
+
   render() {
     const trip = {
       name: 'EuroTrip 2019',
@@ -23,6 +28,8 @@ export default class TripScreen extends Component {
         {id: '8', name: 'Bruxelas', description: 'Hospedagem', price: 100, lat: 0, long: 0},
       ]
     }
+    const { points } = this.state;
+    //console.log(points)
     return (
       <View style={styles.wrapper}>
         <View style={styles.header}>
@@ -40,21 +47,44 @@ export default class TripScreen extends Component {
             paddingTop: 16,
             paddingLeft: 16,
           }}
-          data={trip.places}
+          data={points}
           renderItem={this.renderItem}
           keyExtractor={ item => item.id }/>
       </View>
     )
   }
+
+  componentDidMount(){
+    this.loadData();
+  }
+
+  loadData = async() =>{
+    const id = 1549628001911;
+    const tripsAS = await AsyncStorage.getItem('trips');
+    let trips = [];
+    if (tripsAS){
+      trips = JSON.parse(tripsAS);
+    }
+    //console.log('trips', tripsAS)
+    const pointsAS = await AsyncStorage.getItem('trips-' + id);
+    //console.log('points', pointsAS)
+    let points = [];
+  
+    if (pointsAS){
+      points = JSON.parse(pointsAS);
+    }
+    this.setState({ trips, points })
+  }
+
   renderItem = ({item}) =>{
     return(
       <View style={styles.item}>
         <View style={styles.itemInfo}>
-          <Text style={styles.itemName}>{item.name}</Text>
+          <Text style={styles.itemName}>{item.pointName}</Text>
           <Text>{item.description}</Text>
         </View>
         <View style={styles.wrapperItemPrice}>
-          <Text style={styles.itemPrice}>{item.price}</Text>
+          <Text style={styles.itemPrice}>R$ {item.price.toFixed(2)}</Text>
         </View>  
       </View>
     )

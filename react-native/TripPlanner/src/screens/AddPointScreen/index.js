@@ -61,34 +61,23 @@ export default class AddPointScreen extends Component {
 
   handleSave = async () =>{
     //console.log(this.props.navigation.state.params.id)
-    const id = 1549628001911;
-    const pointAs = await AsyncStorage.getItem('trip'+id);
-    let points = [];
-    if ( pointAs ){
-      points = JSON.parse(pointAs);
-    }
-    points.push(this.state)
-    await AsyncStorage.setItem('trip-'+id, JSON.stringify(points));
+    const id = 1549635398353 + '';
+    const pointAs = await AsyncStorage.getItem('trip');
+    let points = JSON.parse(pointAs);
+    console.log(pointAs)
+    /*const trip = points.map( trip => {
+      if (trip.id === id){
+        trip.places.push(this.state);
+        let total = 0.00;
+        trip.places.forEach(p => {
+          total += p.price
+        });
+        trip.price = total;
+      } 
+      return trip;
+    })*/
 
-    let total = 0;
-    points.forEach(p => {
-      total += p.price
-    });
-
-    const tripsAs = await AsyncStorage.getItem('trips');
-    let trips = [];
-    if ( tripsAs ){
-      trips = JSON.parse(tripsAs)
-    }
-
-    trips.forEach( (trip, index) =>{
-      if (trip.id === id ){
-        trip.price = total
-        trip.latitude = points[0].position.latitude;
-        trip.longitude = points[0].position.longitude;
-      }
-    });
-    console.log(trips)
-    await AsyncStorage.setItem('trips', JSON.stringify(trips));
+    //await AsyncStorage.setItem('trip', JSON.stringify(trip));
+  
   }
 }

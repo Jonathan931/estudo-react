@@ -48,7 +48,7 @@ export default class TripScreen extends Component {
             pagingEnabled 
             keyExtractor={ item => item.id }
             style={[
-              isIphoneX() ? { marginBottom: 20} : { marginBottom: 10}
+              isIphoneX() ? { marginBottom: 20} : null
             ]}/>
         </View>
       </View>
@@ -58,15 +58,18 @@ export default class TripScreen extends Component {
   componentDidMount(){
     this.loadData();
   }
+  
   loadData = async() =>{
     const tripsAS = await AsyncStorage.getItem('trips');
+    console.log(tripsAS);
     let trips = [];
     if (tripsAS){
       trips = JSON.parse(tripsAS);
     }
     this.setState({ trips })
   }
+
   renderItem = ({item}) =>{
-    return <Trip onPress={() => this.props.navigation.navigate('Trip')} title={item.trip} price={item.price}/>
+    return <Trip onPress={() => this.props.navigation.navigate('Trip', { trip: item })} title={item.name} price={item.price}/>
   }
 }

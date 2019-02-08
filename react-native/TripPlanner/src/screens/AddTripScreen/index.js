@@ -28,11 +28,10 @@ export default class AddTripScreen extends Component {
   handleSave = async () =>{
     //AsyncStorage.removeItem( 'trips' );
     const newTrip = {
-      id: new Date().getTime(),
-      trip: this.state.name,
+      id: new Date().getTime() + '',
+      name: this.state.name,
       price: 0,
-      latitude: 0,
-      longitude: 0,
+      places: [],
     };
     
     const tripsAS = await AsyncStorage.getItem('trips');
@@ -41,12 +40,7 @@ export default class AddTripScreen extends Component {
       trips = JSON.parse(tripsAS);
     }
     trips.push(newTrip);
-    //trips
-    //AsyncStorage.removeItem( 'trips' );
-    //trips.push(newTrip)
     await AsyncStorage.setItem('trips', JSON.stringify(trips))
-    console.log('trips', trips)
-    //this.props.navigation.navigate('AddPoint', { id: newTrip.id })
     const { navigation } = this.props;
     navigation.state.params.refresh();
     navigation.goBack();

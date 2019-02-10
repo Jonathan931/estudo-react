@@ -41,6 +41,10 @@ export default class AddTripScreen extends Component {
     }
     trips.push(newTrip);
     await AsyncStorage.setItem('trips', JSON.stringify(trips))
+    this.refresh();
+  }
+
+  refresh = () =>{
     const { navigation } = this.props;
     navigation.state.params.refresh();
     navigation.goBack();

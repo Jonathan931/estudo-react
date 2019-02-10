@@ -10,7 +10,7 @@ export default class TripScreen extends Component {
   }
 
   state ={
-    trips: [],
+    trips: null,
   }
 
   render() {
@@ -28,7 +28,9 @@ export default class TripScreen extends Component {
               longitude: -122.4324,
               latitudeDelta: 0.922,
               longitudeDelta: 0.0421,
-            }}/>
+            }}
+            ref = {ref => this.map = ref}
+            />
             <TouchableOpacity 
               onPress={ () => this.props.navigation.navigate('AddTrip', { refresh: this.loadData }) }
               style={{ 
@@ -49,7 +51,9 @@ export default class TripScreen extends Component {
             keyExtractor={ item => item.id }
             style={[
               isIphoneX() ? { marginBottom: 20} : null
-            ]}/>
+            ]}
+            onViewableItemsChanged={this.handleItemChange}
+           />
         </View>
       </View>
     )
@@ -61,7 +65,7 @@ export default class TripScreen extends Component {
   
   loadData = async() =>{
     const tripsAS = await AsyncStorage.getItem('trips');
-    console.log(tripsAS);
+    //console.log(tripsAS);
     let trips = [];
     if (tripsAS){
       trips = JSON.parse(tripsAS);
@@ -70,6 +74,23 @@ export default class TripScreen extends Component {
   }
 
   renderItem = ({item}) =>{
-    return <Trip onPress={() => this.props.navigation.navigate('Trip', { trip: item })} title={item.name} price={item.price}/>
+    return <Trip onPress={() => this.props.navigation.navigate('Trip', { trip: item, refresh: this.loadData })} title={item.name} price={item.price}/>
+  }
+
+  handleItemChange = ( info ) =>{
+    const { viewbleItems } = info;
+    if ( viewbleItems && viewbleItems.length > 0 ){
+      const [item] = viewbleItems;
+      this.map.animateToRegion()
+      console.log(item, item)
+    }
+    //
+    //console.log(info)
+  }
+
+  regionFrom =  (lat, lon, distance )=>{
+    distance = distance/2;
+    const circumference = 40075;
+    
   }
 }

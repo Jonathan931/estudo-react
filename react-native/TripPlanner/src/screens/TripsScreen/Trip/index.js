@@ -8,7 +8,7 @@ const Trip = props =>{
       <View>
           <Text style={styles.image}>Image</Text>
           <Text>{props.title}</Text>
-          <Text style={styles.price}>{props.price}</Text>
+          <Text style={styles.price}>R$ {props.price.toFixed(2)}</Text>
       </View>
     </TouchableOpacity>
   )

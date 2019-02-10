@@ -49,6 +49,12 @@ const styles = StyleSheet.create({
   },
   itemInfo: {
     flex: 1
+  },
+  addPoint:{
+    position: 'absolute', 
+    top: 26,
+    right: 20,
+    padding: 10
   }
 })
 

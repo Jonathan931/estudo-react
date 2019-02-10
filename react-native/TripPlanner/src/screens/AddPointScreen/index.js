@@ -8,9 +8,9 @@ export default class AddPointScreen extends Component {
   static navigationOptions = {
     header: null,
   }
-  
+
   state = {
-    position:{
+    position: {
       latitude: 37.78825,
       longitude: -122.4324,
     },
@@ -21,63 +21,71 @@ export default class AddPointScreen extends Component {
 
   render() {
     //1549625896380
+    const {position} = this.state;
     return (
       <View style={styles.wrapper}>
         <View style={styles.header}>
           <MapView style={{ flex: 1 }}
+            provider={MapView.PROVIDER_GOOGLE}
             initialRegion={{
               latitude: 37.78825,
               longitude: -122.4324,
-              latitudeDelta: 0.922,
-              longitudeDelta: 0.0421,
+              latitudeDelta: 0.003,
+              longitudeDelta: 0.003,
             }}>
-            <Marker 
+            <Marker
               draggable
               onDragEnd={
-                (evt) => this.setState({ position: evt.nativeEvent.coordinate }) 
+                (evt) => this.setState({ position: evt.nativeEvent.coordinate })
               }
-              coordinate={{
-                latitude: 37.78825,
-                longitude: -122.4324,
-              }} />
+              coordinate={position} />
           </MapView>
           <View style={styles.backButton}>
-            <TouchableOpacity onPress={()=>{ this.props.navigation.goBack()}}>
-              <Image source={require('../../../assets/row-left.png')}/>
+            <TouchableOpacity onPress={() => { this.props.navigation.goBack() }}>
+              <Image source={require('../../../assets/row-left.png')} />
             </TouchableOpacity>
           </View>
         </View>
-        <TextInput style={styles.input} placeholder="Nome do ponto" onChangeText={txt => this.setState({pointName: txt})} />
-        <TextInput style={styles.input} placeholder="Descrição" onChangeText={txt => this.setState({description: txt})} />
-        <TextInput style={styles.input} placeholder="Preço" onChangeText={txt => this.setState({price: parseFloat(txt)})} />
-        
+        <TextInput style={styles.input} placeholder="Nome do ponto" onChangeText={txt => this.setState({ pointName: txt })} />
+        <TextInput style={styles.input} placeholder="Descrição" onChangeText={txt => this.setState({ description: txt })} />
+        <TextInput style={styles.input} placeholder="Preço" onChangeText={txt => this.setState({ price: parseFloat(txt) })} />
+
         <TouchableOpacity style={styles.btn} onPress={this.handleSave}>
-              <Text style={{textAlign: 'center'}}> Salvar Ponto </Text>
+          <Text style={{ textAlign: 'center' }}> Salvar Ponto </Text>
         </TouchableOpacity>
 
       </View>
     )
   }
 
-  handleSave = async () =>{
+  handleSave = async () => {
     //console.log(this.props.navigation.state.params.id)
-    const id = 1549635398353 + '';
-    const pointAs = await AsyncStorage.getItem('trip');
-    let points = JSON.parse(pointAs);
-    console.log(pointAs)
-    /*const trip = points.map( trip => {
-      if (trip.id === id){
-        trip.places.push(this.state);
+    const id = this.props.navigation.state.params.id;
+    const pointAs = await AsyncStorage.getItem('trips');
+    let points = [];
+    if (pointAs) {
+      points = JSON.parse(pointAs);
+    }
+    //let points = JSON.parse(pointAs);
+    //console.log(points)
+    const trip = points.map(trip => {
+      if (trip.id === id) {
+        trip.places.push({ id: new Date().getTime() + '', ...this.state });
         let total = 0.00;
         trip.places.forEach(p => {
           total += p.price
         });
         trip.price = total;
-      } 
+      }
       return trip;
-    })*/
+    })
+    await AsyncStorage.setItem('trips', JSON.stringify(trip));
+    this.refresh();
+  }
 
-    //await AsyncStorage.setItem('trip', JSON.stringify(trip));
-  
+  refresh = () => {
+    const { navigation } = this.props;
+    navigation.state.params.refresh();
+    navigation.goBack();
   }
 }

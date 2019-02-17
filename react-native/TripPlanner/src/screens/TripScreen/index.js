@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, TouchableOpacity, Image, AsyncStorage } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Image, AsyncStorage, ImageBackground } from 'react-native';
 import styles from './styles';
 
 export default class TripScreen extends Component {
@@ -13,29 +13,15 @@ export default class TripScreen extends Component {
   }
 
   render() {
-    //console.log(this.props.navigation.state.params)
     const { trip } = this.state; 
     if (!trip) return;
-    console.log('trip', trip)
-    /*{
-      name: 'EuroTrip 2019',
-      price: 'R$ 5000',
-      places: [
-        {id: '1', name: 'Amsterdan', description: 'Chegada', price: 100, lat: 0, long: 0},
-        {id: '2', name: 'Bruxelas', description: 'Hospedagem', price: 100, lat: 0, long: 0},
-        {id: '3', name: 'Amsterdan', description: 'Chegada', price: 100, lat: 0, long: 0},
-        {id: '4', name: 'Bruxelas', description: 'Hospedagem', price: 100, lat: 0, long: 0},
-        {id: '5', name: 'Amsterdan', description: 'Chegada', price: 100, lat: 0, long: 0},
-        {id: '6', name: 'Bruxelas', description: 'Hospedagem', price: 100, lat: 0, long: 0},
-        {id: '7', name: 'Amsterdan', description: 'Chegada', price: 100, lat: 0, long: 0},
-        {id: '8', name: 'Bruxelas', description: 'Hospedagem', price: 100, lat: 0, long: 0},
-      ]
-    }*/
     const points = trip.places;
-    //console.log(points)
+    //console.log(trip)
     return (
       <View style={styles.wrapper}>
-        <View style={styles.header}>
+        <ImageBackground 
+          style={styles.header}
+          source={{uri: trip.image }}>
           <View style={styles.backButton}>
             <TouchableOpacity onPress={()=>{ 
               this.props.navigation.state.params.refresh(); 
@@ -51,7 +37,7 @@ export default class TripScreen extends Component {
             </TouchableOpacity>
           <Text style={styles.tripName}>{trip.name}</Text>
           <Text style={styles.tripPrice}>R$ {(trip.price || 0.00).toFixed(2)}</Text>
-        </View>
+        </ImageBackground>
         <FlatList
           style={{flex: 1}} 
           contentContainerStyle={{

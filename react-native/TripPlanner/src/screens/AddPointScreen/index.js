@@ -17,27 +17,31 @@ export default class AddPointScreen extends Component {
     pointName: '',
     description: '',
     price: 0,
+    initialRegion:{
+      latitude: 37.78825,
+      longitude: -122.4324,
+      latitudeDelta: 0.003,
+      longitudeDelta: 0.003,
+    }
   }
 
   render() {
-    //1549625896380
-    const {position} = this.state;
+    const {position, initialRegion} = this.state;
     return (
       <View style={styles.wrapper}>
         <View style={styles.header}>
           <MapView style={{ flex: 1 }}
             provider={MapView.PROVIDER_GOOGLE}
-            initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
-              latitudeDelta: 0.003,
-              longitudeDelta: 0.003,
-            }}>
+            initialRegion={initialRegion}
+            region={initialRegion}>
+
             <Marker
               draggable
               onDragEnd={
                 (evt) => this.setState({ position: evt.nativeEvent.coordinate })
               }
+              centerOffset={{ x: -18, y: -60 }}
+              anchor={{ x: 0.69, y: 1 }}
               coordinate={position} />
           </MapView>
           <View style={styles.backButton}>
@@ -56,10 +60,44 @@ export default class AddPointScreen extends Component {
 
       </View>
     )
+  } 
+  
+  findCoordinates = () => {
+    navigator.geolocation.getCurrentPosition(
+      positionR => {
+        const location = positionR;
+        const position = { latitude: location.coords.latitude, longitude: location.coords.longitude  };
+        const initialRegion={
+          latitude:  location.coords.latitude,
+          longitude: location.coords.longitude,
+          latitudeDelta: 0.003,
+          longitudeDelta: 0.003,
+        }
+        this.setState({position, initialRegion});
+
+      },
+      error => console.log(error.message),
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
+    );
+  };
+
+  componentWillMount(){
+    this.findCoordinates()
   }
 
   handleSave = async () => {
-    //console.log(this.props.navigation.state.params.id)
+    if (!this.state.pointName) {
+      alert("Digite o nome do Ponto");
+      return;
+    }
+    if (!this.state.description) {
+      alert("Digite a descrição do Ponto.");
+      return;
+    }
+    if (!this.state.price) {
+      alert("Digite o Preço.")
+      return;
+    }
     const id = this.props.navigation.state.params.id;
     const pointAs = await AsyncStorage.getItem('trips');
     let points = [];

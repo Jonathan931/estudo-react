@@ -20,10 +20,15 @@ export default style = StyleSheet.create({
   price:{
     position: 'absolute', 
     top: 110, 
-    right: 32, 
+    right: -1, 
     textAlign: 'right',
     backgroundColor: '#180079', 
     padding: 4, 
     color: 'white'
-  }
+  },
+  name:{
+    position: 'absolute', 
+    bottom: -17, 
+    left: 0, 
+  },
 })

@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
   tripName:{
     position: 'absolute',
     left: 16,
+    color: 'white',
     bottom: 16
   },
   tripPrice:{

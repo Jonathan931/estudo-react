@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
-import { Container, Form } from './styles';
-import CompareList from '../../components/CompareList';
-import api from '../../services/api';
-import logo from '../../assests/logo.png';
+import React, { Component } from "react";
+import { Container, Form } from "./styles";
+import moment from "moment";
+import CompareList from "../../components/CompareList";
+import api from "../../services/api";
+import logo from "../../assests/logo.png";
 
 export default class Main extends Component {
   state = {
-    repositoryInput: '',
-    repositories: [],
+    repositoryError: false,
+    repositoryInput: "",
+    repositories: []
   };
 
   render() {
@@ -16,7 +18,10 @@ export default class Main extends Component {
     return (
       <Container>
         <img src={logo} alt="Github Compare" />
-        <Form onSubmit={this.handleAddRepository}>
+        <Form
+          withError={this.state.repositoryError}
+          onSubmit={this.handleAddRepository}
+        >
           <input
             type="text"
             placeholder="usuário/repositório"
@@ -31,22 +36,23 @@ export default class Main extends Component {
     );
   }
 
-  handleChangeName = (e) => {
+  handleChangeName = e => {
     this.setState({ repositoryInput: e.target.value });
   };
 
-  handleAddRepository = async (e) => {
+  handleAddRepository = async e => {
     e.preventDefault();
     try {
       const { repositories, repositoryInput } = this.state;
-      const response = await api.get(`/repos/${repositoryInput}`);
-
+      const { data: repository } = await api.get(`/repos/${repositoryInput}`);
+      repository.lastCommit = moment(repository.pushed_at).fromNow();
       this.setState({
-        repositoryInput: '',
-        repositories: [...repositories, response.data],
+        repositoryInput: "",
+        repositories: [...repositories, repository],
+        repositoryError: false
       });
     } catch (err) {
-      console.log(err);
+      this.setState({ repositoryError: true });
     }
   };
 }

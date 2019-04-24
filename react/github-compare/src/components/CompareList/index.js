@@ -2,10 +2,10 @@ import React from "react";
 import Proptypes from "prop-types";
 import { Container, Repository } from "./styles";
 
-const CompareList = ({ repositories }) => (
+const CompareList = ({ repositories, remove, update }) => (
   <Container>
     {repositories.map(repository => (
-      <Repository>
+      <Repository key={repository.id}>
         <header>
           <img src={repository.owner.avatar_url} alt={repository.owner.login} />
           <strong>{repository.name}</strong>
@@ -25,6 +25,14 @@ const CompareList = ({ repositories }) => (
             </li>
           </ul>
         </header>
+        <div className="action">
+          <button type="button" onClick={() => update(repository.id)}>
+            <i className="fa fa-retweet" /> Atualizar
+          </button>
+          <button type="button" onClick={() => remove(repository.id)}>
+            <i className="fa fa-trash" /> Excluir
+          </button>
+        </div>
       </Repository>
     ))}
   </Container>

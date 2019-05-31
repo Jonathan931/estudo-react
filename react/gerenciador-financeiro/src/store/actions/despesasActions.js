@@ -1,8 +1,10 @@
-export const createDepesa = despesa => {
+export const createDespesa = despesa => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
+    const data = despesa.data.toDate();
+    despesa.data = data;
     firestore
-      .collection("projects")
+      .collection("despesas")
       .add({
         ...despesa
       })
@@ -15,7 +17,23 @@ export const createDepesa = despesa => {
   };
 };
 
-export const getDepesa = () => {
+export const removeDespesa = id => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firestore = getFirestore();
+    firestore
+      .collection("despesas")
+      .doc(id)
+      .delete()
+      .then(() => {
+        dispatch({ type: "DELETE_DESPESA_SUCESS" });
+      })
+      .catch(function(error) {
+        dispatch({ type: "DELETE_DESPESA_ERROR" });
+      });
+  };
+};
+
+export const getDespesa = () => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
     firestore
@@ -24,8 +42,9 @@ export const getDepesa = () => {
       .then(
         querySnapshot => {
           const despesas = [];
-          querySnapshot.forEach(doc => despesas.push(doc.data()));
-          console.log(despesas);
+          querySnapshot.forEach(doc =>
+            despesas.push({ ...doc.data(), key: doc.id })
+          );
           dispatch({ type: "LIST_SUCESS_DESPESA", despesas });
         },
         () => {

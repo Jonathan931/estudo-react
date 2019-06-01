@@ -17,6 +17,26 @@ export const createDespesa = despesa => {
   };
 };
 
+export const editDespesa = despesa => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firestore = getFirestore();
+    const data = despesa.data.toDate();
+    despesa.data = data;
+    firestore
+      .collection("despesas")
+      .doc(despesa.id)
+      .set({
+        ...despesa
+      })
+      .then(() => {
+        dispatch({ type: "EDIT_DESPESA_SUCESS" });
+      })
+      .catch(function(error) {
+        dispatch({ type: "EDIT_DESPESA_ERROR" });
+      });
+  };
+};
+
 export const removeDespesa = id => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
@@ -38,6 +58,7 @@ export const getDespesa = () => {
     const firestore = getFirestore();
     firestore
       .collection("despesas")
+      .orderBy("data", "desc")
       .get()
       .then(
         querySnapshot => {

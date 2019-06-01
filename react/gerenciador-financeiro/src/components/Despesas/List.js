@@ -1,10 +1,9 @@
 import React, { PureComponent } from "react";
-import { Row, Table, Divider, Tag, Card, Input, Col, Popconfirm } from "antd";
+import { Table, Divider, Tag, Popconfirm } from "antd";
 import { connect } from "react-redux";
 import { getDespesa, removeDespesa } from "../../store/actions/despesasActions";
 import moment from "moment";
 
-const Search = Input.Search;
 moment.locale("pt-BR");
 
 class DespesasList extends PureComponent {
@@ -47,7 +46,12 @@ class DespesasList extends PureComponent {
         key: "action",
         render: (text, record) => (
           <span>
-            <span style={{ color: "blue", cursor: "pointer" }}>Editar</span>
+            <span
+              onClick={() => this.props.onSetDespesa({ ...record })}
+              style={{ color: "blue", cursor: "pointer" }}
+            >
+              Editar
+            </span>
             <Divider type="vertical" />
             <Popconfirm
               title="Deseja remover?"
@@ -63,29 +67,10 @@ class DespesasList extends PureComponent {
     ];
 
     return (
-      <div style={{ width: "100%", marginBottom: 10, marginTop: 10 }}>
-        <h1 style={{ textAlign: `left`, marginLeft: "2.5%", fontSize: 20 }}>
-          Despesas
-        </h1>
-        <Card
-          style={{
-            width: "95%",
-            margin: "0 auto"
-          }}
-        >
-          <Row style={{ paddingTop: 10 }}>
-            <Col span={10}>
-              <Search
-                placeholder="input search text"
-                onSearch={value => console.log(value)}
-              />
-            </Col>
-          </Row>
-          <Table columns={columns} dataSource={data} />
-        </Card>
-      </div>
+      <Table pagination={{ pageSize: 6 }} columns={columns} dataSource={data} />
     );
   }
+
   componentDidMount() {
     this.props.getDespesa();
   }

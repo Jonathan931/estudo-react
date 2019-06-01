@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Icon } from "antd";
 import { signOut } from "../../../store/actions/authActions";
 import logo from "../../../assets/logo.png";
-import "./Menu.css";
+import { MenuStyles } from "../../../styles/menuStyles";
 
 class SideBar extends PureComponent {
   state = {
@@ -29,6 +29,7 @@ class SideBar extends PureComponent {
         isOpen={menu}
         onStateChange={this.handleStateChange}
       >
+        <MenuStyles />
         <div
           style={{
             display: "flex",
@@ -53,9 +54,8 @@ class SideBar extends PureComponent {
           <Icon type="fall" />
           {"   "}Despesas
         </Link>
-
         <Link className="menu-item" to="/" onClick={this.handleSignOut}>
-          <Icon type="exit" />
+          <Icon type="logout" />
           {"   "}Sair
         </Link>
       </Menu>

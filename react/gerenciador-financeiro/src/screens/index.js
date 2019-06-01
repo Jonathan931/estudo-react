@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { Layout } from "antd";
 import MenuComp from "../components/UI/Menu";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
-import "./index.css";
 import Despesas from "../components/Despesas";
 import Dashboard from "../components/Dashboard";
 import Login from "../components/Login";

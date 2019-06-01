@@ -1,42 +1,22 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
+import moment from "moment";
 import { Modal, Form, Input, DatePicker, InputNumber, Checkbox } from "antd";
-import { createDespesa, getDespesa } from "../../store/actions/despesasActions";
+import {
+  createDespesa,
+  getDespesa,
+  editDespesa
+} from "../../store/actions/despesasActions";
+
+class CheckboxPago extends PureComponent {
+  render() {
+    return (
+      <Checkbox checked={this.props.value} onChange={this.props.onChange} />
+    );
+  }
+}
 
 class DespesasModal extends PureComponent {
-  state = { visible: true };
-
-  showModal = () => {
-    this.setState({
-      visible: true
-    });
-  };
-
-  handleOk = e => {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (err) {
-        return;
-      }
-      if (!err) {
-        if (!values.pago) {
-          values.pago = false;
-        }
-        this.props.createDespesa(values);
-        this.props.getDespesa();
-        this.setState({
-          visible: false
-        });
-      }
-    });
-  };
-
-  handleCancel = e => {
-    this.setState({
-      visible: false
-    });
-  };
-
   render() {
     const formItemLayout = {
       labelCol: {
@@ -49,12 +29,14 @@ class DespesasModal extends PureComponent {
       }
     };
     const { getFieldDecorator } = this.props.form;
+    const { isVisible, onHandleCancel, despesa } = this.props;
     return (
       <Modal
-        title="Cadastro de Despesa"
-        visible={this.state.visible}
+        destroyOnClose
+        title={!despesa ? "Cadastro de Despesa" : "Edição de Despesa"}
+        visible={isVisible}
         onOk={this.handleOk}
-        onCancel={this.handleCancel}
+        onCancel={onHandleCancel}
       >
         <Form {...formItemLayout} onSubmit={this.handleOk}>
           <Form.Item label="Descrição">
@@ -90,17 +72,49 @@ class DespesasModal extends PureComponent {
           </Form.Item>
 
           <Form.Item label="Pago">
-            {getFieldDecorator("pago", {})(<Checkbox />)}
+            {getFieldDecorator("pago", {})(<CheckboxPago />)}
           </Form.Item>
         </Form>
       </Modal>
     );
   }
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    if (this.props.despesa && this.props.despesa !== prevProps.despesa) {
+      const { despesa, form } = this.props;
+      const { descricao, data, valor, pago } = despesa;
+      const dataFormatada = moment(data.toDate());
+      form.setFieldsValue({ descricao, valor, pago, data: dataFormatada });
+    }
+  }
+
+  handleOk = e => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (err) {
+        return;
+      }
+      if (!err) {
+        if (!values.pago) {
+          values.pago = false;
+        }
+        if (this.props.despesa) {
+          values.id = this.props.despesa.key;
+          this.props.editDespesa(values);
+        } else {
+          this.props.createDespesa(values);
+        }
+        this.props.getDespesa();
+        this.props.onHandleCancel();
+      }
+    });
+  };
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     createDespesa: despesa => dispatch(createDespesa(despesa)),
+    editDespesa: despesa => dispatch(editDespesa(despesa)),
     getDespesa: () => dispatch(getDespesa())
   };
 };

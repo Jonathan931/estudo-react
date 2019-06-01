@@ -1,15 +1,6 @@
-html,
-body {
-  margin: 0 !important;
-}
+import { createGlobalStyle } from "styled-components";
 
-#App {
-  font-family: sans-serif;
-
-  /* Give app full page to work with */
-  height: 100vh;
-}
-
+export const MenuStyles = createGlobalStyle`
 #page-wrap {
   text-align: center;
   /* Prevent sidebar from showing a scrollbar on page */
@@ -103,3 +94,4 @@ body {
 .menu-item {
   color: black;
 }
+`;

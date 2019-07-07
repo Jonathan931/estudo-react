@@ -1,13 +1,18 @@
 import React from 'react';
 import Sidebar from './components/Sidebar';
+import Player from './components/Player';
+import { Wrapper, Container } from './styles/components';
 import { GlobalStyles } from './styles/global';
 
 function App() {
   return (
-    <div style={{ width: '100%', height: '100%' }} className="App">
-      <Sidebar />
+    <Wrapper>
+      <Container>
+        <Sidebar />
+      </Container>
+      <Player />
       <GlobalStyles />
-    </div>
+    </Wrapper>
   );
 }
 

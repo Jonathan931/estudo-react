@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Creators as PlaylistsActions } from '../../store/ducks/playlists';
-
 import { Container, NewPlaylist, Nav } from './styles';
+import Loading from '../../components/Loading';
 import AddPlaylistIcon from '../../assets/images/add_playlist.svg';
 
 class Sidebar extends Component {
@@ -18,7 +18,9 @@ class Sidebar extends Component {
           title: PropTypes.string,
         }).isRequired,
       ),
+      loading: PropTypes.bool
     }),
+  
   };
 
   render() {
@@ -65,6 +67,7 @@ class Sidebar extends Component {
           <Nav>
             <li>
               <span>Playlists</span>
+              {this.props.playlists.loading && <Loading />}
             </li>
             {this.props.playlists.data.map(playlist => (
               <li key={playlist.id}>

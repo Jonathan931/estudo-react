@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Creators as PlaylistsActions } from '../../store/ducks/playlists';
-import { Container, NewPlaylist, Nav } from './styles';
-import Loading from '../../components/Loading';
-import AddPlaylistIcon from '../../assets/images/add_playlist.svg';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Creators as PlaylistsActions } from "../../store/ducks/playlists";
+import { Container, NewPlaylist, Nav } from "./styles";
+import Loading from "../../components/Loading";
+import AddPlaylistIcon from "../../assets/images/add_playlist.svg";
 
 class Sidebar extends Component {
   static propTypes = {
@@ -15,12 +15,11 @@ class Sidebar extends Component {
       data: PropTypes.arrayOf(
         PropTypes.shape({
           id: PropTypes.number,
-          title: PropTypes.string,
-        }).isRequired,
+          title: PropTypes.string
+        }).isRequired
       ),
       loading: PropTypes.bool
-    }),
-  
+    })
   };
 
   render() {
@@ -32,7 +31,7 @@ class Sidebar extends Component {
               <Link to="/">Navegar</Link>
             </li>
             <li>
-              <a href="">Rádio</a>
+              <a href="/#">Rádio</a>
             </li>
           </Nav>
           <Nav>
@@ -40,28 +39,28 @@ class Sidebar extends Component {
               <span>SUA BIBLIOTECA</span>
             </li>
             <li>
-              <a href="">Seu Daily Mix</a>
+              <a href="/#">Seu Daily Mix</a>
             </li>
             <li>
-              <a href="">Tocados recentemente</a>
+              <a href="/#">Tocados recentemente</a>
             </li>
             <li>
-              <a href="">Músicas</a>
+              <a href="/#">Músicas</a>
             </li>
             <li>
-              <a href="">Álbums</a>
+              <a href="/#">Álbums</a>
             </li>
             <li>
-              <a href="">Estações</a>
+              <a href="/#">Estações</a>
             </li>
             <li>
-              <a href="">Arquivos locais</a>
+              <a href="/#">Arquivos locais</a>
             </li>
             <li>
-              <a href="">Vídeos</a>
+              <a href="/#">Vídeos</a>
             </li>
             <li>
-              <a href="">Podcasts</a>
+              <a href="/#">Podcasts</a>
             </li>
           </Nav>
           <Nav>
@@ -90,12 +89,13 @@ class Sidebar extends Component {
 }
 
 const mapStateToProps = state => ({
-  playlists: state.playlists,
+  playlists: state.playlists
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators(PlaylistsActions, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(PlaylistsActions, dispatch);
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Sidebar);
